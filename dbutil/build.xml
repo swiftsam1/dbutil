@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<project name="dbutil" default="world-no-src">
+
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="compiledir" location="${build}\classes"/>
+    <property name="dist" location="dist"/>
+    <property name="bindir" location="bin"/>
+    <property name="libdir" location="lib"/>
+    <property name="prefix" value="dbutil"/>
+    <property name="version" value="0.8"/>
+	<property name="resourcesdir" value="resources"/>
+    <property name="distFileName" value="dbutil-${version}"/>
+    <property name="deployDir" value="C:\temp\dbutil"/>
+
+    <path id="compile.path">
+        <fileset dir="${libdir}">
+            <include name="mysql*.jar"/>
+            <include name="ojdbc*.jar"/>
+            <include name="ons.jar"/>
+            <include name="log4j*.jar"/>
+            <include name="commons*.jar"/>
+            <include name="jfreechart-*.jar"/>
+            <include name="jcommon-*.jar"/>
+            <include name="xbean.jar"/>
+            <include name="jsr173_1.0_api.jar"/>
+            <include name="qc.jar"/>
+        </fileset>
+        <pathelement location="${build}"/>
+    </path>
+
+    <path id="xmlbeans.path">
+        <fileset dir="${libdir}" includes="xbean.jar"/>
+        <fileset dir="${libdir}" includes="jsr173_1.0_api.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build}" includeEmptyDirs="true" failonerror="false"/>
+        <delete dir="${dist}" includeEmptyDirs="true" failonerror="false"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${compiledir}"/>
+        <depend srcdir="${src}" destdir="${compiledir}">
+            <include name="**/*"/>
+        </depend>
+        <javac srcdir="${src}" destdir="${compiledir}" debug="on">
+            <classpath refid="compile.path"/>
+            <include name="**/*"/>
+        </javac>
+    </target>
+
+    <target name="build-jar" depends="clean, compile">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/dbutil.jar">
+            <manifest>
+                <attribute name="Build-By" value="Sudhir Movva"/>
+                <!--<attribute name="Main-Class" value="components.db.DBUtilContainer"/>
+                <attribute name="Class-Path" value="mysql-connector-java-3.0.9-stable-bin.jar ojdbc14.jar commons-dbcp-1.2.1.jar commons-collections-3.0.jar commons-pool-1.2.jar log4j.jar"/>-->
+            </manifest>
+            <fileset dir="${compiledir}"/>
+        </jar>
+    </target>
+
+    <target name="init-xmlbean">
+
+        <taskdef name="xmlbean"
+                 classname="org.apache.xmlbeans.impl.tool.XMLBean"
+                 classpathref="xmlbeans.path"/>
+    </target>
+
+    <target name="qc.check">
+        <uptodate property="schemas.notRequired"
+                  targetfile="build/lib/schemas.jar">
+            <srcfiles dir="${src}" includes="components/**/*.xsd"/>
+        </uptodate>
+    </target>
+
+
+    <target name="build-query-catalog-jar" depends="clean, init-xmlbean, qc.check">
+        <mkdir dir="${compiledir}"/>
+        <mkdir dir="${dist}"/>
+        <xmlbean destfile="${dist}/qc.jar"
+                 srcgendir="${compiledir}/src"
+                 classpathref="xmlbeans.path"
+                 debug="on">
+            <fileset dir="${src}" includes="**/*.xsd"/>
+        </xmlbean>
+    </target>
+
+    <target name="generate-beansJars" depends="build-query-catalog-jar">
+        <copy file="${dist}/qc.jar" todir="${libdir}" overwrite="true"/>
+    </target>
+
+    <target name="world" depends="world-no-src">
+        <zip destfile="${dist}/${distFileName}-src.zip">
+            <zipfileset dir="." includes="build.xml" prefix="${prefix}"/>
+            <zipfileset dir="." includes="src/**/*" prefix="${prefix}"/>
+            <zipgroupfileset dir="${dist}" includes="${distFileName}.zip"/>
+        </zip>
+    </target>
+
+    <target name="deployJar" depends="build-jar">
+        <copyfile src="${dist}/dbutil.jar" dest="${deployDir}/lib/dbutil.jar" forceoverwrite="true"/>
+    </target>
+
+    <target name="world-no-src" depends="clean, compile, build-jar">
+        <zip destfile="${dist}/${distFileName}.zip">
+            <zipfileset dir="${resourcesdir}" prefix="${prefix}">
+                <include name="config/dtds/*"/>
+                <include name="config/images/**/*"/>
+            </zipfileset>
+            <zipfileset dir="." fullpath="${prefix}/config/history/RecentProjects.xml"
+                        includes="${resourcesdir}/config/history/RecentProjects.xml.orig"/>
+            <zipfileset dir="." fullpath="${prefix}/logs/dbutil.log" includes="${resourcesdir}/logs/dbutil.log.orig"/>
+            <zipfileset dir="${libdir}" prefix="${prefix}/lib">
+                <include name="mysql-connector-java-5.0.4-bin.jar"/>
+                <include name="ojdbc14.jar"/>
+                <include name="log4j.jar"/>
+                <include name="commons-dbcp*.jar"/>
+                <include name="commons-collections*.jar"/>
+                <include name="commons-pool*.jar"/>
+                <include name="jfreechart-*.jar"/>
+                <include name="jcommon-*.jar"/>
+                <include name="log4j.properties"/>
+                <include name="xbean.jar"/>
+                <include name="jsr173_1.0_api.jar"/>
+                <include name="qc.jar"/>
+            </zipfileset>
+            <zipfileset dir="${dist}" prefix="${prefix}/lib">
+                <include name="dbutil.jar"/>
+            </zipfileset>
+            <zipfileset dir="${resourcesdir}/bin" prefix="${prefix}/bin">
+                <include name="startDbutil.bat"/>
+            </zipfileset>
+        </zip>
+        <delete file="${dist}/dbutil.jar"/>
+        <delete dir="${build}" failonerror="false"/>
+    </target>
+</project>

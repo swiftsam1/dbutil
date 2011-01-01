@@ -1,0 +1,52 @@
+<xs:schema targetNamespace="http://dbprofiler.smartworks.com/qc"
+        xmlns:qc="http://dbprofiler.smartworks.com/qc"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:element name="QueryCatalog">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Query" type="qc:Query"/>
+            </xs:sequence>
+            <xs:attribute name="projectName" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="Query">
+        <xs:sequence>
+            <xs:element name="sql" type="xs:string"/>
+            <xs:element name="ExecutionHistory" type="qc:ExecutionHistory"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="ExecutionHistory">
+        <xs:sequence>
+            <xs:element name="Execution" type="qc:Execution" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Execution">
+        <xs:sequence>
+            <xs:element name="dateTime" type="xs:dateTime" nillable="false"/>
+            <xs:element name="concurrent" type="xs:boolean" nillable="false"/>
+            <xs:element name="consolidationId" type="qc:Consolidation" nillable="true"/> 
+            <xs:element name="Agent" type="qc:Agent" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+
+    </xs:complexType>
+
+
+    <xs:complexType name="Agent">
+        <xs:sequence>
+            <xs:element name="timeToCreateConnection" type="xs:int" nillable="false"/>
+            <xs:element name="timeToExecuteQuery" type="xs:int" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Consolidation">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
