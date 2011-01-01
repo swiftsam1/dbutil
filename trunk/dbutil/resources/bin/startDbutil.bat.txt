@@ -1,0 +1,18 @@
+@echo off
+set CURRENT_DIR=%cd%
+if not "%DBUTIL_HOME%" == "" goto gotHome
+set DBUTIL_HOME=%CURRENT_DIR%
+if exist "%DBUTIL_HOME%\bin\startDbutil.bat" goto okHome
+cd ..
+set DBUTIL_HOME=%cd%
+cd %CURRENT_DIR%
+:gotHome
+if exist "%DBUTIL_HOME%\bin\startDbutil.bat" goto okHome
+echo The DBUTIL_HOME environment variable is not defined correctly
+echo This environment variable is needed to run this program
+goto end
+:okHome
+set ORACLE_HOME=
+set OPMN_LIB=c:\oracle\product\10.1.0\Companion\opmn\lib
+set DBUTIL_CLASSPATH=%DBUTIL_HOME%\lib\dbutil.jar;%DBUTIL_HOME%\lib\commons-collections-3.0.jar;%DBUTIL_HOME%\lib\commons-dbcp-1.2.1.jar;%DBUTIL_HOME%\lib\commons-pool-1.2.jar;%DBUTIL_HOME%\lib\log4j.jar;%DBUTIL_HOME%\lib\mysql-connector-java-3.0.9-stable-bin.jar;%DBUTIL_HOME%\lib\ojdbc14.jar;%DBUTIL_HOME%\lib\jcommon-1.0.0-pre2.jar;%DBUTIL_HOME%\lib\jfreechart-1.0.0-pre2.jar;%OPMN_LIB%\ons.jar;%OPMN_LIB%\opmnplugin.jar
+java -DDBUTIL_HOME=%DBUTIL_HOME% -Doracle.ons.oraclehome=%ORACLE_HOME% -Xmx150M -Xms150M -cp %DBUTIL_CLASSPATH% components.db.StartMe

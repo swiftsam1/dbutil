@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT projects (project+)>
+<!ELEMENT project (path, active)>
+<!ATTLIST project name CDATA #REQUIRED>
+<!ELEMENT path (#PCDATA)>
+<!ELEMENT active (#PCDATA)>
