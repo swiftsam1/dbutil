@@ -8,7 +8,7 @@
     <property name="bindir" location="bin"/>
     <property name="libdir" location="lib"/>
     <property name="prefix" value="dbutil"/>
-    <property name="version" value="0.8"/>
+    <property name="version" value="0.9"/>
 	<property name="resourcesdir" value="resources"/>
     <property name="distFileName" value="dbutil-${version}"/>
     <property name="deployDir" value="C:\temp\dbutil"/>
@@ -132,6 +132,9 @@
             </zipfileset>
             <zipfileset dir="${resourcesdir}/bin" prefix="${prefix}/bin">
                 <include name="startDbutil.bat"/>
+            </zipfileset>
+            <zipfileset dir="${resourcesdir}/bin" prefix="${prefix}/bin">
+                <include name="startDbutil.sh"/>
             </zipfileset>
         </zip>
         <delete file="${dist}/dbutil.jar"/>
