@@ -19,14 +19,14 @@ import java.util.LinkedList;
 
 public class DatabaseInfo extends BaseInfo implements IDatabaseInfo {
 
-    public LinkedList getTablesInfo() {
+    public LinkedList<ITableInfo> getTablesInfo() {
         return tablesInfo;
     }
 
     public void addTableInfo(ITableInfo info) {
-        LinkedList temp = tablesInfo;
+        LinkedList<ITableInfo> temp = tablesInfo;
         if (this.tablesInfo == null) {
-            this.tablesInfo = new LinkedList();
+            this.tablesInfo = new LinkedList<ITableInfo>();
         }
         this.tablesInfo.add(info);
         firePropertyChange("NewTableInfoAdded", temp, this.tablesInfo);
@@ -44,11 +44,11 @@ public class DatabaseInfo extends BaseInfo implements IDatabaseInfo {
         return updated;
     }
 
-    public void setTablesInfo(LinkedList tablesInfo) {
-        LinkedList temp = this.tablesInfo;
+    public void setTablesInfo(LinkedList<ITableInfo> tablesInfo) {
+        LinkedList<ITableInfo> temp = this.tablesInfo;
         this.tablesInfo = tablesInfo;
         firePropertyChange("tablesInfo", temp, this.tablesInfo);
     }
 
-    private LinkedList tablesInfo;
+    private LinkedList<ITableInfo> tablesInfo;
 }
