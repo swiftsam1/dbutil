@@ -18,7 +18,7 @@ package org.wsm.database.tools.browser.logic;
 import java.util.LinkedList;
 
 public interface IDatabaseInfo {
-    public LinkedList getTablesInfo();
+    public LinkedList<ITableInfo> getTablesInfo();
     public void addTableInfo(ITableInfo info);
-    public void setTablesInfo(LinkedList tablesInfo);
+    public void setTablesInfo(LinkedList<ITableInfo> tablesInfo);
 }

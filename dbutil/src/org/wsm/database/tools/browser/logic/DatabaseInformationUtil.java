@@ -36,7 +36,7 @@ public class DatabaseInformationUtil {
         return info;
     }
 
-    public static LinkedList getTabelInfo() {
+    public static LinkedList<ITableInfo> getTabelInfo() {
         if (DbUtilConstants.DATABASE_TYPE_MYSQL.equals(ConnectionManager.currentDbProps.getDatabaseType()))
             return getMysqlTableStructure();
         if (DbUtilConstants.DATABASE_TYPE_ORACLE.equals(ConnectionManager.currentDbProps.getDatabaseType()))
@@ -45,8 +45,8 @@ public class DatabaseInformationUtil {
     }
 
 
-    private static LinkedList getMysqlTableStructure() {
-        LinkedList tabList = new LinkedList();
+    private static LinkedList<ITableInfo> getMysqlTableStructure() {
+        LinkedList<ITableInfo> tabList = new LinkedList<ITableInfo>();
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -91,9 +91,9 @@ public class DatabaseInformationUtil {
         return tabList;
     }
 
-    private static LinkedList getOracleTableStructure() {
-        LinkedList tabList = new LinkedList();
-        Hashtable tabHt = new Hashtable();
+    private static LinkedList<ITableInfo> getOracleTableStructure() {
+        LinkedList<ITableInfo> tabList = new LinkedList<ITableInfo>();
+        Hashtable<String, ITableInfo> tabHt = new Hashtable<String, ITableInfo>();
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -116,7 +116,7 @@ public class DatabaseInformationUtil {
                     if (ti == null) {
                         ti = new TableInfo();
                         ti.setName(tabName);
-                        ti.setColumnInfo(new LinkedList());
+                        ti.setColumnInfo(new LinkedList<IColumnInfo>());
                     } else {
                         tiExists = true;
                     }
@@ -128,7 +128,7 @@ public class DatabaseInformationUtil {
                     }
                 }
             }
-            tabList = new LinkedList(Collections.list(tabHt.elements()));
+            tabList = new LinkedList<ITableInfo>(Collections.list(tabHt.elements()));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -167,8 +167,8 @@ public class DatabaseInformationUtil {
         return null;
     } */
 
-    private static LinkedList getMysqlColumnInfo(String tabName) {
-        LinkedList tabList = new LinkedList();
+    private static LinkedList<IColumnInfo> getMysqlColumnInfo(String tabName) {
+        LinkedList<IColumnInfo> colList = new LinkedList<IColumnInfo>();
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -186,7 +186,7 @@ public class DatabaseInformationUtil {
                 info.setNullable(rs.getBoolean("Null"));
                 info.setKey(rs.getBoolean("Key"));
                 info.setDefaultValue(rs.getString("Default"));
-                tabList.add(info);
+                colList.add(info);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -213,11 +213,11 @@ public class DatabaseInformationUtil {
                 }
             }
         }
-        return tabList;
+        return colList;
     }
 
-    private static LinkedList getOracleColumnInfo(String tabName) {
-        LinkedList tabList = new LinkedList();
+    private static LinkedList<IColumnInfo> getOracleColumnInfo(String tabName) {
+        LinkedList<IColumnInfo> colList = new LinkedList<IColumnInfo>();
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -233,7 +233,7 @@ public class DatabaseInformationUtil {
             while (rs.next()) {
                 ColumnInfo info = new ColumnInfo();
                 info.setName(rs.getString("CNAME"));
-                tabList.add(info);
+                colList.add(info);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -260,7 +260,7 @@ public class DatabaseInformationUtil {
                 }
             }
         }
-        return tabList;
+        return colList;
     }
 
 

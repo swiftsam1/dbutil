@@ -24,11 +24,11 @@ public class TableInfo extends BaseInfo implements ITableInfo, Comparable {
         return getName();
     }
 
-    public LinkedList getColumnInfo() {
+    public LinkedList<IColumnInfo> getColumnInfo() {
         return columnInfo;
     }
 
-    public void setColumnInfo(LinkedList columnInfo) {
+    public void setColumnInfo(LinkedList<IColumnInfo> columnInfo) {
         this.columnInfo = columnInfo;
     }
 
@@ -74,6 +74,6 @@ public class TableInfo extends BaseInfo implements ITableInfo, Comparable {
         return 0;
     }
 
-    private LinkedList columnInfo;
+    private LinkedList<IColumnInfo> columnInfo;
 
 }
