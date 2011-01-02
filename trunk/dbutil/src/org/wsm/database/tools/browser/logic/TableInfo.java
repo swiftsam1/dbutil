@@ -18,7 +18,7 @@ package org.wsm.database.tools.browser.logic;
 import java.util.LinkedList;
 
 
-public class TableInfo extends BaseInfo implements ITableInfo, Comparable {
+public class TableInfo extends BaseInfo implements ITableInfo, Comparable<ITableInfo> {
 
     public String toString() {
         return getName();
@@ -70,8 +70,8 @@ public class TableInfo extends BaseInfo implements ITableInfo, Comparable {
      * @throws ClassCastException if the specified object's type prevents it
      *                            from being compared to this Object.
      */
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(ITableInfo ti) {
+    	return toString().compareTo(ti.toString());
     }
 
     private LinkedList<IColumnInfo> columnInfo;
