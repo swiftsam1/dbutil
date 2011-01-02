@@ -117,9 +117,9 @@ public class ConnectionManager implements Chain {
         StringBuffer sb = new StringBuffer();
         sb.append("jdbc:").append(properties.getDatabaseType()).append(":");
         if (DbUtilConstants.DATABASE_TYPE_ORACLE.equals(properties.getDatabaseType())) {
-            if (DbUtilConstants.ORACLE_OCI_DRIVER.equalsIgnoreCase(driverType)) {
+            if (DbUtilConstants.ORACLE_OCI_DRIVER.equalsIgnoreCase(properties.getDriverType())) {
                 sb.append("oci:@").append(properties.getTnsEntry());
-            } else if (DbUtilConstants.ORACLE_THIN_DRIVER.equals(driverType)) {
+            } else if (DbUtilConstants.ORACLE_THIN_DRIVER.equals(properties.getDriverType())) {
                 sb.append("thin:@");
                 sb.append(properties.getHost());
                 sb.append(":");
